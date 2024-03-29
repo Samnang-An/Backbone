@@ -1,0 +1,45 @@
+version: '3'
+services:
+  liferay-app:
+    image: 'liferay/portal:latest'
+    container_name: 'liferay-app'
+    # stop_grace_period allow appropriate time for tomcat to stop
+    stop_grace_period: 5m
+    user: root
+    environment:
+      LIFERAY_SETUP_PERIOD_WIZARD_PERIOD_ENABLED: "false"
+      LIFERAY_DISABLE_TRIAL_LICENSE: 'true'
+      LIFERAY_JPDA_ENABLED: 'true'
+      LIFERAY_WORKSPACE_ENVIRONMENT: 'local'
+      LIFERAY_JVM_OPTS: '-Xmx4g -Xms4g -XX:MaxMetaspaceSize=2048m -XX:MetaspaceSize=2048m'
+    volumes:
+      - './configs:/home/liferay/configs:rw'
+      - './build/docker/deploy:/mnt/liferay/deploy:rw'
+      - './build/docker/scripts:/home/liferay/scripts'
+      - './build/docker/scripts/pre-configure:/usr/local/liferay/scripts/pre-configure'
+#      - './development/liferay/document_library:/opt/liferay/data/document_library:rw'
+      - './development/liferay/files:/mnt/liferay/files:rw'
+    depends_on:
+      - db
+    networks:
+      - backbone-net
+    ports:
+      - '8000:8000'
+      - '8080:8080'
+      - '11311:11311'
+  db:
+    image: 'postgres:15.6-alpine3.19'
+    container_name: 'liferay-db'
+    ports:
+      - 5431:5432
+    volumes:
+      - ~/data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=backbone
+      - POSTGRES_DB=backbone
+    networks:
+      - backbone-net
+networks:
+  backbone-net:
+    driver: bridge
