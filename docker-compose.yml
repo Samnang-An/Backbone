@@ -13,10 +13,10 @@ services:
       LIFERAY_WORKSPACE_ENVIRONMENT: 'local'
       LIFERAY_JVM_OPTS: '-Xmx4g -Xms4g -XX:MaxMetaspaceSize=2048m -XX:MetaspaceSize=2048m'
     volumes:
-      - './configs:/home/liferay/configs:rw'
+      - './development/configs:/home/liferay/configs:rw'
       - './build/docker/deploy:/mnt/liferay/deploy:rw'
-      - './build/docker/scripts:/home/liferay/scripts'
-      - './build/docker/scripts/pre-configure:/usr/local/liferay/scripts/pre-configure'
+      - './development/scripts:/home/liferay/scripts'
+      - './development/scripts/pre-configure:/usr/local/liferay/scripts/pre-configure'
 #      - './development/liferay/document_library:/opt/liferay/data/document_library:rw'
       - './development/liferay/files:/mnt/liferay/files:rw'
     depends_on:
