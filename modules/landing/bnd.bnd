@@ -1,0 +1,4 @@
+Bundle-Name: landing
+Bundle-SymbolicName: com.backbone
+Bundle-Version: 1.0.0
+Export-Package: com.backbone.constants
